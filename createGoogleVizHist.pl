@@ -16,7 +16,7 @@ create the basic HTML to plot an stocked histogram.
    -c --csv          CSV with values        File          STDIN
    -o --out          HTML output            File          STDOUT
    -p --palette      Color palette          File          repeats.palette
-   -t --title        Plot title             Str           Repeat Histogram 
+   -t --title        Plot title             Str           Repeat Landscape 
    
    -h --help         Print this screen
    -v --verbose      Verbose mode ON
@@ -57,7 +57,7 @@ my $verbose  = undef;         # Verbose mode
 my $version  = undef;         # Version call flag
 my $in       = undef;
 my $out      = undef;
-my $title    = 'Repeat Histogram';
+my $title    = 'Repeat Landscape';
 my $palette  = 'repeats.palette';
 
 # Main variables
@@ -80,6 +80,8 @@ GetOptions(
 pod2usage(-verbose => 2) if (defined $help);
 printVersion() if (defined $version);
 
+$tittle =~ s/_/ /g;
+
 openFH();
 
 while (<>) {
@@ -101,8 +103,6 @@ print <<_HEADER_
 <html>
   <head>
     <title>Repeat Landscape</title>
-    <script src="http://www.google-analytics.com/urchin.js" type="text/javascript"></script>
-    <script type="text/javascript">uacct = "UA-2840131-2";urchinTracker();</script>
     <script type="text/javascript" src="https://www.google.com/jsapi"></script>
     <script type="text/javascript">
       google.load("visualization", "1", {packages:["corechart"]});
@@ -176,8 +176,6 @@ sub openFH {
         $in_fh = "gunzip  -c $in | " if ($in =~ m/gz$/i);
         $in_fh = "bunzip2 -c $in | " if ($in =~ m/bz2$/i);
         open STDIN, "$in_fh" or die "cannot open file $in\n";
-        my $sp = $in; $sp =~ s/.csv//;
-        $title = getName($sp);
     }
 
     if (defined $out) {
@@ -204,54 +202,3 @@ sub getColors {
     
     return $pal;
 }
-
-# getName => return the label
-sub getName {
-    my $sp  = shift @_;
-    my $lab = 'unknown';
-    if    ($sp eq 'hg19')    { $lab = 'Human (hg19)'; }
-    elsif ($sp eq 'hg18')    { $lab = 'Human (hg18)'; }
-    elsif ($sp eq 'mm9')     { $lab = 'Mouse (mm9)'; }
-    elsif ($sp eq 'panTro2') { $lab = 'Chimp (panTro2)'; }
-    elsif ($sp eq 'ponAbe2') { $lab = 'Orangutan (ponAbe2)'; }
-    elsif ($sp eq 'rheMac2') { $lab = 'Rhesus (rheMac2)'; }
-    elsif ($sp eq 'rn4')     { $lab = 'Rat (rn4)'; }
-    elsif ($sp eq 'cavPor3') { $lab = 'Guinea Pig (cavPor3)'; }
-    elsif ($sp eq 'felCat3') { $lab = 'Cat (felCat3)'; }
-    elsif ($sp eq 'canFam2') { $lab = 'Dog (canFam2)'; }
-    elsif ($sp eq 'bosTau4') { $lab = 'Cow (bosTau4)'; }
-    elsif ($sp eq 'susScr2') { $lab = 'Pig (susScr2)'; }
-    elsif ($sp eq 'loxAfr2') { $lab = 'Elephant (loxAfr2)'; }
-    elsif ($sp eq 'ornAna1') { $lab = 'Platypus (ornAna1)'; }
-    elsif ($sp eq 'monDom5') { $lab = 'Opossum (monDom5)'; }
-    elsif ($sp eq 'oryCun2') { $lab = 'Rabitt (oryCun2)'; }
-    elsif ($sp eq 'myoLuc2') { $lab = 'Bat (myoLuc2)'; }
-    elsif ($sp eq 'equCab2') { $lab = 'Horse (equCab2)'; }
-    elsif ($sp eq 'taeGut1') { $lab = 'Zebrafinch (taeGut1)'; }
-    elsif ($sp eq 'galGal3') { $lab = 'Chicken (galGal3)'; }
-    elsif ($sp eq 'fr2')     { $lab = 'Takifugu (fr2)'; }
-    elsif ($sp eq 'danRer6') { $lab = 'Zebrafish (danRer6)'; }
-    elsif ($sp eq 'braFlo1') { $lab = 'Lancelet (braFlo1)'; }
-    elsif ($sp eq 'ci2')     { $lab = 'Ciona (ci2)'; }
-    elsif ($sp eq 'xenTro2') { $lab = 'Frog (xenTro2)'; }
-    elsif ($sp eq 'gasAcu1') { $lab = 'Stickleback (gasAcu1)'; }
-    elsif ($sp eq 'strPur2') { $lab = 'Sea Urchin (strPur2)'; }
-    elsif ($sp eq 'araTha5') { $lab = 'Arabidopsis (araTha5)'; }
-    elsif ($sp eq 'orySat5') { $lab = 'Rice (orySat5)'; }
-    elsif ($sp eq 'anoGam1') { $lab = 'Mosquito (anoGam1)'; }
-    elsif ($sp eq 'dm3')     { $lab = 'Drosophila (dm3)'; }
-    elsif ($sp eq 'allMis0') { $lab = 'Alligator (allMis0)'; }
-    elsif ($sp eq 'anoCar2') { $lab = 'Lizard (anoCar2)'; }
-    elsif ($sp eq 'dasNov2') { $lab = 'Armadillo (dasNov2)'; }
-    elsif ($sp eq 'proCap1') { $lab = 'Hyrax (proCap1)'; }
-    elsif ($sp eq 'nasVit1') { $lab = 'Wasp (nasVit1)'; }
-    elsif ($sp eq 'choHof1') { $lab = 'Sloth (choHof1)'; }
-    elsif ($sp eq 'calJac3') { $lab = 'Marmoset (calJac3)'; }
-    elsif ($sp eq 'nomLeu1') { $lab = 'Gibbon (nomLeu1)'; }
-    elsif ($sp eq 'turTru1') { $lab = 'Dolphin (turTru1)'; }
-    elsif ($sp eq 'eriEur1') { $lab = 'Hedgehog (eriEur1)'; }
-    else                     { $lab = $sp; }
-    
-    return $lab;
-}
-
