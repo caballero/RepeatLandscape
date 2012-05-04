@@ -1,5 +1,28 @@
 #!/usr/bin/perl -w
 
+=head1 NAME
+
+KimuraDist_noCG_fromRMalign.pl
+
+=head1 DESCRIPTION
+
+parse the ouput of RepeatMasker (cross_match output with aligments)
+reporting the Kimura mutational rate excluding CpG sites.
+
+=head1 USAGE
+
+perl KimuraDist_noCG_fromRMalign.pl [-rep repeatname] (-indels) (-nolow) FILE
+
+=head1 AUTHOR
+
+Arian Smit, Institute for Systems Biology @ 2012
+
+=head1 CONTACT
+
+asmit@systemsbiology.org
+
+=cut
+
 my ($script) = ($0 =~ m|([^/]*)$|);
 $USAGE = "usage: $script [-rep repeatname] (-indels) <cross_match output WITH ALIGNMENTS>
 
