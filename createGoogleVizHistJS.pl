@@ -80,7 +80,7 @@ GetOptions(
 pod2usage(-verbose => 2) if (defined $help);
 printVersion() if (defined $version);
 
-$tittle =~ s/_/ /g;
+$title =~ s/_/ /g;
 
 openFH();
 
