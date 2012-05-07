@@ -70,6 +70,9 @@ my $genome   = undef;
 my $html     = undef;
 my $opt      =    '';
 
+# PATH to required files
+my $dir = './';
+
 # Calling options
 GetOptions(
     'h|help'           => \$help,
@@ -96,20 +99,20 @@ unless (defined $name) {
 
 if (defined $genome) {
     warn "obtaining genome size from $genome\n" if (defined $verbose);
-    system ("perl calcGenomeSize.pl $genome >> genome.size");
+    system ("perl $dir/calcGenomeSize.pl $genome >> genome.size");
 }
 
 warn "processing alignment file $align\n" if (defined $verbose);
-system ("perl KimuraDist_noCG_fromRMalign.pl -nolow $align > $sp.kout");
+system ("perl $dir/KimuraDist_noCG_fromRMalign.pl -nolow $align > $sp.kout");
 
 warn "processing kimura file $sp.kout\n" if (defined $verbose);
 $opt = '-v' if (defined $verbose);
-system ("perl parseKimuraOut.pl -k $sp.kout $opt");
+system ("perl $dir/parseKimuraOut.pl -g $dir/genome.size -k $sp.kout $opt");
 
 warn "creating google chart using $sp.csv\n" if (defined $verbose);
 if (defined $html) {
-    system ("perl createGoogleVizHist.pl -c $sp.csv -t $name -o $sp.html");
+    system ("perl $dir/createGoogleVizHist.pl -c $sp.csv -p $dir/repeats.palette -t $name -o $sp.html");
 }
 else {
-    system ("perl createGoogleVizHistJS.pl -c $sp.csv -t $name -o $sp.js");
+    system ("perl $dir/createGoogleVizHistJS.pl -c $sp.csv -p $dir/repeats.palette -t $name -o $sp.js");
 }
